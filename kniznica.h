@@ -37,13 +37,13 @@ void utried(kniznica_t *kniznica);
 
 int compare(kniha_t *prva, kniha_t *druha);
 
-kniha_t zoStringu(char *skniha);
+//kniha_t zoStringu(char *skniha);
 
-kniha_t zoStringuPreSubor(char* s_kniha);
+kniha_t zoStringu(char* s_kniha);
+
+//char** split(char* a_str, const char a_delim);
 
 char** split(char* a_str, const char a_delim);
-
-char** split2(char* a_str, const char a_delim);
 
 char* kniha_toString(kniha_t *kniha);
 

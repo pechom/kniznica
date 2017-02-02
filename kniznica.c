@@ -95,42 +95,42 @@ int compare(kniha_t *prva, kniha_t *druha) {
     } else return strcmp(prva->nazov, druha->nazov);
 }
 
+//kniha_t zoStringu(char* s_kniha) {
+//    kniha_t kniha;
+//    kniha_init(&kniha);
+//    char** delimitovana = malloc(sizeof (char*) * sizeof (*s_kniha));
+//    char** s_autori = malloc(sizeof (char*) * sizeof (*s_kniha));
+//    int is_pozicana = 0;
+//    delimitovana = split2(s_kniha, '\t');
+//    if (delim_length > 4) {
+//        is_pozicana = 1;
+//    }
+//    s_autori = split2(delimitovana[2], ',');
+//    char* nazov = strdup(delimitovana[1]);
+//    if (is_pozicana == 1) {
+//        char* citatel = strdup(delimitovana[4]);
+//        int doba = atoi(delimitovana[5]);
+//        vyplnKnihu(nazov, s_autori, is_pozicana, citatel, doba, &kniha);
+//    } else {
+//        char* citatel = NULL;
+//        int doba = 0;
+//        vyplnKnihu(nazov, s_autori, is_pozicana, citatel, doba, &kniha);
+//    }
+//
+//    return kniha;
+//}
+
 kniha_t zoStringu(char* s_kniha) {
     kniha_t kniha;
     kniha_init(&kniha);
     char** delimitovana = malloc(sizeof (char*) * sizeof (*s_kniha));
     char** s_autori = malloc(sizeof (char*) * sizeof (*s_kniha));
     int is_pozicana = 0;
-    delimitovana = split2(s_kniha, '\t');
-    if (delim_length > 4) {
-        is_pozicana = 1;
-    }
-    s_autori = split2(delimitovana[2], ',');
-    char* nazov = strdup(delimitovana[1]);
-    if (is_pozicana == 1) {
-        char* citatel = strdup(delimitovana[4]);
-        int doba = atoi(delimitovana[5]);
-        vyplnKnihu(nazov, s_autori, is_pozicana, citatel, doba, &kniha);
-    } else {
-        char* citatel = NULL;
-        int doba = 0;
-        vyplnKnihu(nazov, s_autori, is_pozicana, citatel, doba, &kniha);
-    }
-
-    return kniha;
-}
-
-kniha_t zoStringuPreSubor(char* s_kniha) {
-    kniha_t kniha;
-    kniha_init(&kniha);
-    char** delimitovana = malloc(sizeof (char*) * sizeof (*s_kniha));
-    char** s_autori = malloc(sizeof (char*) * sizeof (*s_kniha));
-    int is_pozicana = 0;
-    delimitovana = split2(s_kniha, '\t');
+    delimitovana = split(s_kniha, '\t');
     if (delim_length > 3) {
         is_pozicana = 1;
     }
-    s_autori = split2(delimitovana[1], ',');
+    s_autori = split(delimitovana[1], ',');
     int i;
     char* nazov = strdup(delimitovana[0]);
     if (is_pozicana == 1) {
@@ -146,20 +146,20 @@ kniha_t zoStringuPreSubor(char* s_kniha) {
     return kniha;
 }
 
-char** split(char* a_str, const char a_delim) {
-    delim_length = 0;
-    char *str = strdup(a_str);
-    char *token;
-    char** result = malloc(sizeof (char*) * sizeof (*a_str));
-    while ((token = strsep(&str, &a_delim))) {
-        result[delim_length] = strdup(token);
-        delim_length++;
-    }
-    free(str);
-    return result;
-}
+//char** split(char* a_str, const char a_delim) {
+//    delim_length = 0;
+//    char *str = strdup(a_str);
+//    char *token;
+//    char** result = malloc(sizeof (char*) * sizeof (*a_str));
+//    while ((token = strsep(&str, &a_delim))) {
+//        result[delim_length] = strdup(token);
+//        delim_length++;
+//    }
+//    free(str);
+//    return result;
+//}
 
-char** split2(char* a_str, const char a_delim) {
+char** split(char* a_str, const char a_delim) {
     delim_length = 0;
     char *str = strdup(a_str);
     char *token;
@@ -168,7 +168,6 @@ char** split2(char* a_str, const char a_delim) {
     delim[1] = 0;
     char** result = malloc(sizeof (char*) * strlen(a_str));
     token = strtok(a_str, delim);
-    printf(">>> %s \n", token);
     result[delim_length] = strdup(token);
     delim_length++;
     while ((token = strtok(NULL, delim))) {
@@ -252,7 +251,7 @@ kniznica_t zoSuboru(char* file) {
     f = fopen(file, "r");
     char buffer[512];
     while (fgets(buffer, sizeof (buffer), f)) {// fgets konci pri '\n'
-        kniha = zoStringuPreSubor(buffer);
+        kniha = zoStringu(buffer);
         pridaj_knihu(&kniha, &kniznica);
     }
     fclose(f);
