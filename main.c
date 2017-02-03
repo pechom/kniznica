@@ -26,16 +26,16 @@ int main(int argc, char** argv) {
     vyplnKnihu("weird of the white wolf", a2, 0, NULL, 0, &kniha2);
     pridaj_knihu(&kniha1, &kniznica);
     pridaj_knihu(&kniha2, &kniznica);
-    //    printf("%s\n", kniznica.knihy[0].nazov);
-    //    printf("%s\n", kniznica.knihy[0].autori[0]);
-    //    printf("%d\n", kniznica.knihy[0].pozicana);
-    //    printf("%s\n", kniznica.knihy[0].citatel);
-    //    printf("%d\n", kniznica.knihy[0].doba);
-    //    
-    //    printf("%s\n", kniznica.knihy[1].nazov);
-    //    printf("%s\n", kniznica.knihy[1].autori[0]);
-    //     printf("%s\n", kniznica.knihy[1].autori[1]);
-    //    printf("%d\n", kniznica.knihy[1].pozicana);
+//        printf("%s\n", kniznica.knihy[0].nazov);
+//        printf("%s\n", kniznica.knihy[0].autori[0]);
+//        printf("%d\n", kniznica.knihy[0].pozicana);
+//        printf("%s\n", kniznica.knihy[0].citatel);
+//        printf("%d\n", kniznica.knihy[0].doba);
+//        
+//        printf("%s\n", kniznica.knihy[1].nazov);
+//        printf("%s\n", kniznica.knihy[1].autori[0]);
+//         printf("%s\n", kniznica.knihy[1].autori[1]);
+//        printf("%d\n", kniznica.knihy[1].pozicana);
 
     //uloz(&kniznica);// ak bol projekt v userovi tak sa v mene usera pridal znak / co sposobilo ze cygwin nemohol najst exe subor na spustenie
     //ak som to dal do public priecinka tak som zase bez admin spustenia nemohol pridavat do suboru
@@ -68,15 +68,15 @@ int main(int argc, char** argv) {
     //    int comparement = compare(&kniha1, &kniha2);
     //    printf("%s\n", "ciselne porovnanie knih:");
     //    printf("%d\n", comparement);
-            char* s_kniha1 = kniha_toString(&kniha1);
-            printf("%s\n", "vypis prvej knihy");
-            printf("%s\n", s_kniha1);
-            char* s_kniha2 = kniha_toString(&kniha2);
-            printf("%s\n", "vypis druhej knihy");
-            printf("%s\n", s_kniha2);
-    //    char* s_kniznica = kniznica_toString(&kniznica);
-    //    printf("%s\n", "vypis kniznice");
-    //    printf("%s\n", s_kniznica);
+    char* s_kniha1 = kniha_toString(&kniha1);
+    printf("%s\n", "vypis prvej knihy");
+    printf("%s\n", s_kniha1);
+    char* s_kniha2 = kniha_toString(&kniha2);
+    printf("%s\n", "vypis druhej knihy");
+    printf("%s\n", s_kniha2);
+    char* s_kniznica = kniznica_toString(&kniznica);
+//        printf("%s\n", "vypis kniznice");
+//        printf("%s\n", s_kniznica);
     //    printf("%s\n", "pocet dni knihy pred novym dnom: ma byt 21");
     //    printf("%d\n", kniznica.knihy[0].doba);
     //    novyDen(3, &kniznica);

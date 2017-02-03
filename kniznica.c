@@ -23,6 +23,7 @@ int delim_length;
 
 void kniha_init(kniha_t *kniha) {
     kniha->autori = NULL;
+    kniha->autori_size=0;
     kniha->citatel = NULL;
     kniha->doba = 0;
     kniha->nazov = NULL;
@@ -55,7 +56,7 @@ void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int dob
         kniha->autori[i] = malloc((strlen(autori[i]) + 1) * sizeof (char));
         strncpy(kniha->autori[i], autori[i], strlen(autori[i]) + 1);
     }
-
+    kniha->autori_size=count;
     kniha->pozicana = pozicana;
     if (citatel != NULL) {
         kniha->citatel = malloc((strlen(citatel) + 1) * sizeof (char));
@@ -187,55 +188,55 @@ char** split(char* a_str, const char a_delim) {
         delim_length++;
     }
     free(str);
-    return result; //v metode ktora ziadala result ho treb uvolint
+    return result; //v metode ktora ziadala result ho treb uvolnit
 }
 
 char* kniha_toString(kniha_t *kniha) {
-    char* result = malloc(sizeof (char*) * sizeof (kniha_t*));
-    char tmp[256];
-    strcpy(tmp, kniha->nazov);
-    strcpy(result, tmp);
-    strcat(result, "\t");
+    char* result = malloc(sizeof (char) * sizeof (kniha_t));
+    char tmp[128]; //predpokl. max velkost jedneho prvku knihy
+    strncpy(tmp, kniha->nazov, strlen(kniha->nazov) + 1);
+    strncpy(result, tmp, strlen(tmp) + 1);
+    strncat(result, "\t",2);
     int i;
-    for (i = 0; i < sizeof (*kniha->autori) / sizeof (char*); i++) {
-        strcat(result, kniha->autori[i]);
-        strcat(result, ",");
+    for (i = 0; i < kniha->autori_size; i++) {
+        strncat(result, kniha->autori[i],strlen(kniha->autori[i])+1);
+        strncat(result, ",",2);
     }
     result[strlen(result) - 1] = 0;
     if (kniha->pozicana == 1) {
-        strcat(result, "\t");
+        strncat(result, "\t",2);
         snprintf(tmp, 10, "%d", kniha->pozicana);
-        strcat(result, tmp);
-        strcat(result, "\t");
-        strcpy(tmp, kniha->citatel);
-        strcat(result, tmp);
-        strcat(result, "\t");
+        strncat(result, tmp, strlen(tmp)+1);
+        strncat(result, "\t",2);
+        strncpy(tmp, kniha->citatel, strlen(kniha->citatel)+1);
+        strncat(result, tmp,strlen(tmp)+1);
+        strncat(result, "\t",2);
         snprintf(tmp, 10, "%d", kniha->doba);
-        strcat(result, tmp);
-        strcat(result, "\t");
+        strncat(result, tmp,strlen(tmp)+1);
+        strncat(result, "\t",2);
     } else {
-        strcat(result, "\t");
+        strncat(result, "\t",2);
         snprintf(tmp, 10, "%d", kniha->pozicana);
-        strcat(result, tmp);
+        strncat(result, tmp,strlen(tmp)+1);
     }
     return result;
-}
+}//v metode ktora ziadala result ho treb uvolnit
 
 char* kniznica_toString(kniznica_t *kniznica) {
-    char* result = malloc(sizeof (char*)*kniznica->size * 500);
+    char* result = malloc(sizeof(char) * kniznica->size * 512);//predpokl. max velkost knihy
     int i;
     for (i = 0; i < kniznica->size; i++) {
         char* result_k = kniha_toString(&kniznica->knihy[i]);
         strcat(result_k, "\n");
         if (i == 0) {
-            strcpy(result, result_k);
+            strncpy(result, result_k, strlen(result_k)+1);
         } else {
             strcat(result, result_k);
             strcat(result, ",");
         }
     }
     result[strlen(result) - 1] = 0;
-    return result;
+    return result;//v metode ktora ziadala result ho treb uvolnit
 }
 
 void uloz(kniznica_t *kniznica) {

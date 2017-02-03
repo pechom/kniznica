@@ -4,6 +4,7 @@
 typedef struct Kniha {
     char *nazov;
     char **autori; //pole pointerov na stringy
+    int autori_size;
     int pozicana;
     char *citatel;
     int doba;
