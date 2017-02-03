@@ -17,10 +17,23 @@ int main(int argc, char** argv) {
     map_init(&mapa);
     char** autori = malloc(sizeof (char*)*50);
     autori[0] = "michael moorcock";
+    char**a2 = malloc(sizeof (char*)*50);
+    a2[0] = "michael moorcock";
+    a2[1] = "peter chomic";
     vyplnKnihu("sailor on the seas of the fate", autori, 1, "michael moorcock", 21, &kniha1);
-    vyplnKnihu("weird of the white wolf", autori, 0, NULL, 0, &kniha2);
+    vyplnKnihu("weird of the white wolf", a2, 0, NULL, 0, &kniha2);
     pridaj_knihu(&kniha1, &kniznica);
     pridaj_knihu(&kniha2, &kniznica);
+    printf("%s\n", kniznica.knihy[0].nazov);
+    printf("%s\n", kniznica.knihy[0].autori[0]);
+    printf("%d\n", kniznica.knihy[0].pozicana);
+    printf("%s\n", kniznica.knihy[0].citatel);
+    printf("%d\n", kniznica.knihy[0].doba);
+    
+    printf("%s\n", kniznica.knihy[1].nazov);
+    printf("%s\n", kniznica.knihy[1].autori[0]);
+     printf("%s\n", kniznica.knihy[1].autori[1]);
+    printf("%d\n", kniznica.knihy[1].pozicana);
 
 
     //uloz(&kniznica);// ak bol projekt v userovi tak sa v mene usera pridal znak / co sposobilo ze cygwin nemohol najst exe subor na spustenie
@@ -29,16 +42,16 @@ int main(int argc, char** argv) {
     //kniznica_t k2 = zoSuboru("C:\\Users\\Peťo Chomič\\Desktop\\materialy skola\\kniznica.txt"); //detto
     //char* s_k2 = kniznica_toString(&kniznica);
     //printf("%s\n", s_k2);
-    
-     //    //ostatne metody su funkcne
+
+    //    //ostatne metody su funkcne
 
     //    char k3[] = "sailor on the seas of the fate\tmichael moorcock\t1\tpeter\t20";
-    //    kniha_t kniha3 = zoStringu(k3); 
-    //    printf("%s\n", kniha3.nazov);
-    //    printf("%s\n", kniha3.autori[0]);
-    //    printf("%d\n", kniha3.pozicana);
-    //    printf("%s\n", kniha3.citatel);
-    //    printf("%d\n", kniha3.doba);
+    //kniha_t kniha3 = zoStringu(k3);
+    //        printf("%s\n", kniha3.nazov);
+    //        printf("%s\n", kniha3.autori[0]);
+    //        printf("%d\n", kniha3.pozicana);
+    //        printf("%s\n", kniha3.citatel);
+    //        printf("%d\n", kniha3.doba);
     //    char k4[]="sailor on the seas of the fate\tmichael moorcock,peter chomic\t1\tpeter\t20";
     //    char k5[]="sailor on the seas of the fate\tmichael moorcock,peter chomic\t0";
     //    kniha_t kniha4 = zoStringu(k5); 
