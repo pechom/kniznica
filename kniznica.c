@@ -9,6 +9,16 @@
 #include "kniznica.h"
 
 
+//malloc pola stringov:
+//char **array;
+//array = malloc(sizeofarray * sizeof(char*));
+//for(int i = 0; i < sizeofarray; i++) {
+//malloc prvkov
+//  array[i] = malloc((strlen(s) + 1) * sizeof(char));
+//strcpy(array[i], string[i]);
+//}
+
+
 int delim_length;
 
 void kniha_init(kniha_t *kniha) {
@@ -32,23 +42,34 @@ void map_init(mapa_t *mapa) {
 }
 
 void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int doba, kniha_t *kniha) {
-    kniha->nazov = nazov;
+    kniha->nazov = malloc((strlen(nazov) + 1) * sizeof (char));
+    strncpy(kniha->nazov, nazov, strlen(nazov) + 1);
     //autori su pole smernikov, teda na ich uchovanie treba velkost char* * velkost pola
     size_t count = 0;
-    while (autori[count] != NULL){ 
-     count++;
+    while (autori[count] != NULL) {
+        count++;
     }
-    //kniha->autori = realloc(kniha->autori, sizeof (char*) * sizeof (autori));
     kniha->autori = realloc(kniha->autori, sizeof (char*) * count);
-    kniha->autori = autori;
+    int i;
+    for (i = 0; i < count; i++) {
+        kniha->autori[i] = malloc((strlen(autori[i]) + 1) * sizeof (char));
+        strncpy(kniha->autori[i], autori[i], strlen(autori[i]) + 1);
+    }
+
     kniha->pozicana = pozicana;
-    kniha->citatel = citatel;
+    if (citatel != NULL) {
+        kniha->citatel = malloc((strlen(citatel) + 1) * sizeof (char));
+        strncpy(kniha->citatel, citatel, strlen(citatel) + 1);
+    } else {
+        kniha->citatel = NULL;
+    }
     kniha->doba = doba;
 }
 
 void pridaj_knihu(kniha_t *kniha, kniznica_t *kniznica) {
     kniznica->size = kniznica->size + 1;
-    kniznica->knihy = realloc(kniznica->knihy, sizeof (kniha_t*) * kniznica->size);
+    //potrebujem velkost smerniku na knihu * pocet knih
+    kniznica->knihy = realloc(kniznica->knihy, sizeof (kniha_t) * kniznica->size);
     kniznica->knihy[kniznica->size - 1] = *kniha;
 }
 
@@ -66,10 +87,11 @@ void pridaj_map(mapa_t *mapa, char* string, int hodnota) {
     if (new == 1) {
         mapa->size++;
         mapa->string_array = realloc(mapa->string_array, sizeof (char*) * mapa->size);
-        mapa->string_array[mapa->size - 1] = strdup(string);
-        mapa->pocty_vyskytov = realloc(mapa->pocty_vyskytov, sizeof (int)*mapa->size);
+        mapa->string_array[mapa->size - 1] = malloc((strlen(string) + 1) * sizeof (char));
+        strncpy(mapa->string_array[mapa->size - 1], string, strlen(string) + 1);
+        mapa->pocty_vyskytov = realloc(mapa->pocty_vyskytov, sizeof (int*)*mapa->size);
         mapa->pocty_vyskytov[mapa->size - 1] = 1;
-        mapa->sucty_hodnot = realloc(mapa->sucty_hodnot, sizeof (int)*mapa->size);
+        mapa->sucty_hodnot = realloc(mapa->sucty_hodnot, sizeof (int*)*mapa->size);
         mapa->sucty_hodnot[mapa->size - 1] = hodnota;
     } else {
         new = 1;
@@ -80,14 +102,16 @@ void pridaj_map(mapa_t *mapa, char* string, int hodnota) {
 void utried(kniznica_t *kniznica) {
     int i = 0;
     int j = 0;
+    kniha_t tmp;
+    kniha_init(&tmp);
     for (i = 0; i < kniznica->size; i++) {
         for (j = i + 1; j < kniznica->size; j++) {
             if (strcmp(kniznica->knihy[i].autori[0], kniznica->knihy[j].autori[0]) > 0) {
-                kniha_t tmp = kniznica->knihy[i];
+                tmp = kniznica->knihy[i];
                 kniznica->knihy[i] = kniznica->knihy[j];
                 kniznica->knihy[j] = tmp;
             } else if ((strcmp(kniznica->knihy[i].autori[0], kniznica->knihy[j].autori[0]) > 0)&&(kniznica->knihy[i].nazov, kniznica->knihy[j].nazov)) {
-                kniha_t tmp = kniznica->knihy[i];
+                tmp = kniznica->knihy[i];
                 kniznica->knihy[i] = kniznica->knihy[j];
                 kniznica->knihy[j] = tmp;
             }
@@ -95,7 +119,7 @@ void utried(kniznica_t *kniznica) {
     }
 }
 
-int compare(kniha_t *prva, kniha_t *druha) {
+int compare(kniha_t *prva, kniha_t *druha) {// v<0 - prva je mensia, v>0 - druha je mensia
     if (strcmp(prva->autori[0], druha->autori[0]) != 0) {
         return strcmp(prva->autori[0], druha->autori[0]);
     } else return strcmp(prva->nazov, druha->nazov);
@@ -104,8 +128,9 @@ int compare(kniha_t *prva, kniha_t *druha) {
 kniha_t zoStringu(char* s_kniha) {
     kniha_t kniha;
     kniha_init(&kniha);
-    char** delimitovana = malloc(sizeof (char*) * sizeof (*s_kniha));
-    char** s_autori = malloc(sizeof (char*) * sizeof (*s_kniha));
+    //polia smernikov na casti knihy. teoret. moze byt kniha splitovana po kazdom pismene, preto je ich velkost char pointer * dlzka retazca
+    char** delimitovana = malloc(sizeof (char*) * strlen(s_kniha));
+    char** s_autori = malloc(sizeof (char*) * strlen(s_kniha));
     int is_pozicana = 0;
     delimitovana = split(s_kniha, '\t');
     if (delim_length > 3) {
@@ -113,17 +138,34 @@ kniha_t zoStringu(char* s_kniha) {
     }
     s_autori = split(delimitovana[1], ',');
     int i;
-    char* nazov = strdup(delimitovana[0]);
+    char* nazov = malloc(sizeof (char)*(strlen(delimitovana[0]) + 1));
+    strncpy(nazov, delimitovana[0], strlen(delimitovana[0]) + 1);
     if (is_pozicana == 1) {
-        char* citatel = strdup(delimitovana[3]);
+        char* citatel = malloc(sizeof (char)*(strlen(delimitovana[3]) + 1));
+        strncpy(citatel, delimitovana[3], strlen(delimitovana[3]) + 1);
         int doba = atoi(delimitovana[4]);
         vyplnKnihu(nazov, s_autori, is_pozicana, citatel, doba, &kniha);
+        free(citatel);
     } else {
         char* citatel = NULL;
         int doba = 0;
         vyplnKnihu(nazov, s_autori, is_pozicana, citatel, doba, &kniha);
     }
 
+    free(nazov);
+    i = 0;
+    for (i = 0; i < 5; i++) {
+        if (delimitovana[i] != NULL) {
+            free(delimitovana[i]);
+        }
+    }
+    i = 0;
+    while (s_autori[i] != NULL) {
+        free(s_autori[i]);
+        i++;
+    }
+    free(s_autori);
+    free(delimitovana);
     return kniha;
 }
 
@@ -136,14 +178,16 @@ char** split(char* a_str, const char a_delim) {
     delim[1] = 0;
     char** result = malloc(sizeof (char*) * strlen(a_str));
     token = strtok(a_str, delim);
-    result[delim_length] = strdup(token);
+    result[delim_length] = malloc((strlen(token) + 1) * sizeof (char));
+    strncpy(result[delim_length], token, strlen(token) + 1);
     delim_length++;
     while ((token = strtok(NULL, delim))) {
-        result[delim_length] = strdup(token);
+        result[delim_length] = malloc((strlen(token) + 1) * sizeof (char));
+        strncpy(result[delim_length], token, strlen(token) + 1);
         delim_length++;
     }
     free(str);
-    return result;
+    return result; //v metode ktora ziadala result ho treb uvolint
 }
 
 char* kniha_toString(kniha_t *kniha) {
@@ -203,7 +247,7 @@ void uloz(kniznica_t *kniznica) {
         for (i = 0; i < kniznica->size; i++) {
             kniha = kniznica->knihy[i];
             char* s_kn = kniha_toString(&kniha);
-            fwrite(s_kn, strlen(s_kn), sizeof(char), f);
+            fwrite(s_kn, strlen(s_kn), sizeof (char), f);
             fprintf(f, "\n");
         }
         fclose(f);
