@@ -11,10 +11,10 @@
 
 //malloc pola stringov:
 //char **array;
-//array = malloc(sizeofarray * sizeof(char*));
+//array = malloc(sizeofarray * sizeof(char*));  //su tu ulozene smerniky na char
 //for(int i = 0; i < sizeofarray; i++) {
 //malloc prvkov
-//  array[i] = malloc((strlen(s) + 1) * sizeof(char));
+//  array[i] = malloc((strlen(s) + 1) * sizeof(char));  //tu uz je string
 //strcpy(array[i], string[i]);
 //}
 
@@ -23,7 +23,7 @@ int delim_length;
 
 void kniha_init(kniha_t *kniha) {
     kniha->autori = NULL;
-    kniha->autori_size=0;
+    kniha->autori_size = 0;
     kniha->citatel = NULL;
     kniha->doba = 0;
     kniha->nazov = NULL;
@@ -56,7 +56,7 @@ void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int dob
         kniha->autori[i] = malloc((strlen(autori[i]) + 1) * sizeof (char));
         strncpy(kniha->autori[i], autori[i], strlen(autori[i]) + 1);
     }
-    kniha->autori_size=count;
+    kniha->autori_size = count;
     kniha->pozicana = pozicana;
     if (citatel != NULL) {
         kniha->citatel = malloc((strlen(citatel) + 1) * sizeof (char));
@@ -196,47 +196,47 @@ char* kniha_toString(kniha_t *kniha) {
     char tmp[128]; //predpokl. max velkost jedneho prvku knihy
     strncpy(tmp, kniha->nazov, strlen(kniha->nazov) + 1);
     strncpy(result, tmp, strlen(tmp) + 1);
-    strncat(result, "\t",2);
+    strncat(result, "\t", 2);
     int i;
     for (i = 0; i < kniha->autori_size; i++) {
-        strncat(result, kniha->autori[i],strlen(kniha->autori[i])+1);
-        strncat(result, ",",2);
+        strncat(result, kniha->autori[i], strlen(kniha->autori[i]) + 1);
+        strncat(result, ",", 2);
     }
     result[strlen(result) - 1] = 0;
     if (kniha->pozicana == 1) {
-        strncat(result, "\t",2);
+        strncat(result, "\t", 2);
         snprintf(tmp, 10, "%d", kniha->pozicana);
-        strncat(result, tmp, strlen(tmp)+1);
-        strncat(result, "\t",2);
-        strncpy(tmp, kniha->citatel, strlen(kniha->citatel)+1);
-        strncat(result, tmp,strlen(tmp)+1);
-        strncat(result, "\t",2);
+        strncat(result, tmp, strlen(tmp) + 1);
+        strncat(result, "\t", 2);
+        strncpy(tmp, kniha->citatel, strlen(kniha->citatel) + 1);
+        strncat(result, tmp, strlen(tmp) + 1);
+        strncat(result, "\t", 2);
         snprintf(tmp, 10, "%d", kniha->doba);
-        strncat(result, tmp,strlen(tmp)+1);
-        strncat(result, "\t",2);
+        strncat(result, tmp, strlen(tmp) + 1);
+        strncat(result, "\t", 2);
     } else {
-        strncat(result, "\t",2);
+        strncat(result, "\t", 2);
         snprintf(tmp, 10, "%d", kniha->pozicana);
-        strncat(result, tmp,strlen(tmp)+1);
+        strncat(result, tmp, strlen(tmp) + 1);
     }
     return result;
 }//v metode ktora ziadala result ho treb uvolnit
 
 char* kniznica_toString(kniznica_t *kniznica) {
-    char* result = malloc(sizeof(char) * kniznica->size * 512);//predpokl. max velkost knihy
+    char* result = malloc(sizeof (char) * kniznica->size * 512); //predpokl. max velkost knihy
     int i;
     for (i = 0; i < kniznica->size; i++) {
         char* result_k = kniha_toString(&kniznica->knihy[i]);
-        strcat(result_k, "\n");
+        strncat(result_k, "\n", 2);
         if (i == 0) {
-            strncpy(result, result_k, strlen(result_k)+1);
+            strncpy(result, result_k, strlen(result_k) + 1);
         } else {
-            strcat(result, result_k);
-            strcat(result, ",");
+            strncat(result, result_k, strlen(result_k) + 1);
+            strncat(result, ",", 1);
         }
     }
     result[strlen(result) - 1] = 0;
-    return result;//v metode ktora ziadala result ho treb uvolnit
+    return result; //v metode ktora ziadala result ho treb uvolnit
 }
 
 void uloz(kniznica_t *kniznica) {
@@ -298,7 +298,8 @@ void pozicka(char* nazov, char* citatel, kniznica_t *kniznica) {
     for (i = 0; i < kniznica->size; i++) {
         if ((strcmp(kniznica->knihy[i].nazov, nazov) == 0)&& (kniznica->knihy[i].pozicana == 0)) {
             kniznica->knihy[i].pozicana = 1;
-            kniznica->knihy[i].citatel = strdup(citatel);
+            kniznica->knihy[i].citatel = malloc((strlen(citatel) + 1) * sizeof (char));
+            strncpy(kniznica->knihy[i].citatel, citatel, strlen(citatel) + 1);
             kniznica->knihy[i].doba = 0;
             break;
         }
@@ -384,12 +385,9 @@ char** zoznamNazvovKnihAutora(char* meno, kniznica_t *kniznica) {
     int duplicita = 0;
     char** autorove_knihy = malloc(sizeof (char*) * kniznica->size);
     int autor_size = 0;
-    for (i = 0; i < kniznica->size; i++) {
-        autorove_knihy[i] = NULL;
-    }
     i = 0;
     for (i = 0; i < kniznica->size; i++) {
-        for (k = 0; k < sizeof (*kniznica->knihy[i].autori) / sizeof (char*); k++) {
+        for (k = 0; k < kniznica->knihy[i].autori_size; k++) {
             if (strcmp(kniznica->knihy[i].autori[k], meno) == 0) {
                 for (j = 0; j < kniznica->size; j++) {
                     if ((autorove_knihy[j] != NULL) &&(strcmp(kniznica->knihy[i].nazov, autorove_knihy[j]) == 0)) {
@@ -398,7 +396,8 @@ char** zoznamNazvovKnihAutora(char* meno, kniznica_t *kniznica) {
                     }
                 }
                 if (duplicita == 0) {
-                    autorove_knihy[autor_size] = strdup(kniznica->knihy[i].nazov);
+                    autorove_knihy[autor_size] = malloc(sizeof (char)*(strlen(kniznica->knihy[i].nazov) + 1));
+                    strncpy(autorove_knihy[autor_size], kniznica->knihy[i].nazov, strlen(kniznica->knihy[i].nazov) + 1);
                     autor_size++;
                 } else {
                     duplicita = 0;
@@ -416,13 +415,6 @@ char** slavniCitatelia(kniznica_t *kniznica) {
     int idx = 0;
     char** citatelia = malloc(sizeof (char*) * kniznica->size);
     char** slavni = malloc(sizeof (char*) * kniznica->size);
-    for (i = 0; i < kniznica->size; i++) {
-        citatelia[i] = NULL;
-    }
-    i = 0;
-    for (i = 0; i < kniznica->size; i++) {
-        slavni[i] = NULL;
-    }
     i = 0;
     for (i = 0; i < kniznica->size; i++) {
         if (kniznica->knihy[i].pozicana == 1) {
@@ -434,6 +426,8 @@ char** slavniCitatelia(kniznica_t *kniznica) {
 
             }
             if (duplicita == 0) {
+                citatelia[idx] = malloc(sizeof (char)* (strlen(kniznica->knihy[i].citatel) + 1));
+                strncpy(citatelia[idx], kniznica->knihy[i].citatel, strlen(kniznica->knihy[i].citatel) + 1);
                 citatelia[idx] = strdup(kniznica->knihy[i].citatel);
                 idx++;
             } else {
@@ -447,9 +441,10 @@ char** slavniCitatelia(kniznica_t *kniznica) {
     int idx2 = 0;
     for (i = 0; i < idx; i++) {
         for (j = 0; j < kniznica->size; j++) {
-            for (k = 0; k < sizeof (*kniznica->knihy[i].autori) / sizeof (char*); k++) {
+            for (k = 0; k < kniznica->knihy[i].autori_size; k++) {
                 if (strcmp(kniznica->knihy[i].autori[k], citatelia[i]) == 0) {
-                    slavni[idx2] = strdup(citatelia[i]);
+                    slavni[idx2] = malloc(sizeof (char)* (strlen(citatelia[i]) + 1));
+                    strncpy(slavni[idx2], citatelia[i], strlen(citatelia[i]) + 1);
                     idx2++;
                     break;
                 }
@@ -488,6 +483,7 @@ char* najOblubenejsiaKniha(kniznica_t *kniznica) {
     for (j = 0; j < oblubenost.size; j++) {
         if ((oblubenost.pocty_vyskytov[j] == max_obl)&&(oblubenost.sucty_hodnot[j] == max_pozic)) {
             return oblubenost.string_array[j];
+            break;
         }
     }
 }
