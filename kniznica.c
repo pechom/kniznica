@@ -55,7 +55,6 @@ void kniha_free(kniha_t *kniha) {
         free(kniha->citatel);
         kniha->doba = 0;
     }
-    //free(kniha);
 }
 
 void kniznica_free(kniznica_t *kniznica) {
@@ -399,6 +398,7 @@ int pocetTitulov(kniznica_t *kniznica) { //nahradzam set
             duplicita = 0;
         }
     }
+    kniznica_free(&distinct);
     return poc_k;
 }
 
@@ -498,6 +498,7 @@ char** slavniCitatelia(kniznica_t *kniznica) {
 char* najOblubenejsiaKniha(kniznica_t *kniznica) {
     mapa_t oblubenost;
     map_init(&oblubenost);
+    char *result;
     int i;
     int max_obl = 0;
     int max_pozic = 0;
@@ -523,8 +524,11 @@ char* najOblubenejsiaKniha(kniznica_t *kniznica) {
     j = 0;
     for (j = 0; j < oblubenost.size; j++) {
         if ((oblubenost.pocty_vyskytov[j] == max_obl)&&(oblubenost.sucty_hodnot[j] == max_pozic)) {
-            return oblubenost.string_array[j];
+            result=malloc(sizeof(char)*(strlen(oblubenost.string_array[j])+1));
+            strncpy(result, oblubenost.string_array[j],strlen(oblubenost.string_array[j])+1);
             break;
         }
     }
+    mapa_free(&oblubenost);
+    return result;
 }
