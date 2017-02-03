@@ -26,17 +26,18 @@ int main(int argc, char** argv) {
     vyplnKnihu("weird of the white wolf", a2, 0, NULL, 0, &kniha2);
     pridaj_knihu(&kniha1, &kniznica);
     pridaj_knihu(&kniha2, &kniznica);
-    printf("%s\n", kniznica.knihy[0].nazov);
-    printf("%s\n", kniznica.knihy[0].autori[0]);
-    printf("%d\n", kniznica.knihy[0].pozicana);
-    printf("%s\n", kniznica.knihy[0].citatel);
-    printf("%d\n", kniznica.knihy[0].doba);
-    printf("%s\n", kniznica.knihy[1].nazov);
-    printf("%s\n", kniznica.knihy[1].autori[0]);
-    printf("%s\n", kniznica.knihy[1].autori[1]);
-    printf("%d\n", kniznica.knihy[1].pozicana);
-    kniha_free(&kniznica.knihy[2]);
-
+//    printf("%s\n", kniznica.knihy[0].nazov);
+//    printf("%s\n", kniznica.knihy[0].autori[0]);
+//    printf("%d\n", kniznica.knihy[0].pozicana);
+//    printf("%s\n", kniznica.knihy[0].citatel);
+//    printf("%d\n", kniznica.knihy[0].doba);
+//    printf("%s\n", kniznica.knihy[1].nazov);
+//    printf("%s\n", kniznica.knihy[1].autori[0]);
+//    printf("%s\n", kniznica.knihy[1].autori[1]);
+//    printf("%d\n", kniznica.knihy[1].pozicana);
+//    kniha_free(&kniha1);
+//    kniznica_free(&kniznica);
+//      mapa_free(&mapa);  
     //uloz(&kniznica);// ak bol projekt v userovi tak sa v mene usera pridal znak / co sposobilo ze cygwin nemohol najst exe subor na spustenie
     //ak som to dal do public priecinka tak som zase bez admin spustenia nemohol pridavat do suboru
 

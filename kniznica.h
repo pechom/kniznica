@@ -32,7 +32,7 @@ void kniha_free(kniha_t *kniha);
 
 void kniznica_free(kniznica_t *kniznica);
 
-void mapa_free(mapa_t mapa);
+void mapa_free(mapa_t *mapa);
 
 void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int doba, kniha_t *kniha);
 

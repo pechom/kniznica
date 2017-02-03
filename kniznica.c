@@ -42,19 +42,40 @@ void map_init(mapa_t *mapa) {
     mapa->size = 0;
 }
 
-void kniha_free(kniha_t *kniha){
+void kniha_free(kniha_t *kniha) {
     free(kniha->nazov);
-    int i=0;
+    int i = 0;
     for (i = 0; i < kniha->autori_size; i++) {
         free(kniha->autori[i]);
     }
-    kniha->autori_size=0;
-    if(kniha->pozicana==1){
-        kniha->pozicana=0;
+    free(kniha->autori);
+    kniha->autori_size = 0;
+    if (kniha->pozicana == 1) {
+        kniha->pozicana = 0;
         free(kniha->citatel);
-        kniha->doba=0;
+        kniha->doba = 0;
     }
-    free(kniha);
+    //free(kniha);
+}
+
+void kniznica_free(kniznica_t *kniznica) {
+    int i;
+    for (i = 0; i < kniznica->size; i++) {
+        kniha_free(&kniznica->knihy[i]);
+    }
+    free(kniznica->knihy);
+    kniznica->size = 0;
+}
+
+void mapa_free(mapa_t *mapa) {
+    int i;
+    for (i = 0; i < mapa->size; i++) {
+        free(mapa->string_array[i]);
+    }
+    free(mapa->string_array);
+    free(mapa->pocty_vyskytov);
+    free(mapa->sucty_hodnot);
+    mapa->size = 0;
 }
 
 void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int doba, kniha_t *kniha) {
@@ -65,7 +86,6 @@ void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int dob
     while (autori[count] != NULL) {
         count++;
     }
-    printf("%d\n",count);
     kniha->autori = realloc(kniha->autori, sizeof (char*) * count);
     int i;
     for (i = 0; i < count; i++) {
@@ -86,7 +106,7 @@ void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int dob
 void pridaj_knihu(kniha_t *kniha, kniznica_t *kniznica) {
     kniznica->size = kniznica->size + 1;
     //potrebujem velkost smerniku na knihu * pocet knih
-    kniznica->knihy = realloc(kniznica->knihy, sizeof (kniha_t*) * kniznica->size);
+    kniznica->knihy = realloc(kniznica->knihy, sizeof (kniha_t) * kniznica->size);
     kniznica->knihy[kniznica->size - 1] = *kniha;
 }
 
@@ -467,9 +487,9 @@ char** slavniCitatelia(kniznica_t *kniznica) {
             }
         }
     }
-    i=0;
+    i = 0;
     for (i = 0; i < idx; i++) {
-     free(citatelia[idx]);   
+        free(citatelia[idx]);
     }
     free(citatelia);
     return slavni;
