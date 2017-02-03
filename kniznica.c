@@ -42,14 +42,30 @@ void map_init(mapa_t *mapa) {
     mapa->size = 0;
 }
 
+void kniha_free(kniha_t *kniha){
+    free(kniha->nazov);
+    int i=0;
+    for (i = 0; i < kniha->autori_size; i++) {
+        free(kniha->autori[i]);
+    }
+    kniha->autori_size=0;
+    if(kniha->pozicana==1){
+        kniha->pozicana=0;
+        free(kniha->citatel);
+        kniha->doba=0;
+    }
+    free(kniha);
+}
+
 void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int doba, kniha_t *kniha) {
     kniha->nazov = malloc((strlen(nazov) + 1) * sizeof (char));
     strncpy(kniha->nazov, nazov, strlen(nazov) + 1);
     //autori su pole smernikov, teda na ich uchovanie treba velkost char* * velkost pola
-    size_t count = 0;
+    int count = 0;
     while (autori[count] != NULL) {
         count++;
     }
+    printf("%d\n",count);
     kniha->autori = realloc(kniha->autori, sizeof (char*) * count);
     int i;
     for (i = 0; i < count; i++) {
@@ -70,7 +86,7 @@ void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int dob
 void pridaj_knihu(kniha_t *kniha, kniznica_t *kniznica) {
     kniznica->size = kniznica->size + 1;
     //potrebujem velkost smerniku na knihu * pocet knih
-    kniznica->knihy = realloc(kniznica->knihy, sizeof (kniha_t) * kniznica->size);
+    kniznica->knihy = realloc(kniznica->knihy, sizeof (kniha_t*) * kniznica->size);
     kniznica->knihy[kniznica->size - 1] = *kniha;
 }
 
@@ -451,6 +467,11 @@ char** slavniCitatelia(kniznica_t *kniznica) {
             }
         }
     }
+    i=0;
+    for (i = 0; i < idx; i++) {
+     free(citatelia[idx]);   
+    }
+    free(citatelia);
     return slavni;
 }
 

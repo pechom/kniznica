@@ -28,6 +28,12 @@ void kniznica_init(kniznica_t *kniznica);
 
 void map_init(mapa_t *mapa);
 
+void kniha_free(kniha_t *kniha);
+
+void kniznica_free(kniznica_t *kniznica);
+
+void mapa_free(mapa_t mapa);
+
 void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int doba, kniha_t *kniha);
 
 void pridaj_knihu(kniha_t *kniha, kniznica_t *kniznica);
