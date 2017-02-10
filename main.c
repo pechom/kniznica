@@ -7,25 +7,33 @@
 
 int main(int argc, char** argv) {
     printf("%s\n", "******************");
-//    kniha_t kniha1;
-//    kniha_t kniha2;
-//    kniznica_t kniznica;
-//    mapa_t mapa;
-//    kniha_init(&kniha1);
-//    kniha_init(&kniha2);
-//    kniznica_init(&kniznica);
-//    map_init(&mapa);
-//    pridaj_map(&mapa, "peter chomic", 1);
-//    char** autori = malloc(sizeof (char*)*50);
-//    autori[0] = "michael moorcock";
-//    char**a2 = malloc(sizeof (char*)*50);
-//    a2[0] = "michael moorcock";
-//    a2[1] = "peter chomic";
-//    vyplnKnihu("sailor on the seas of the fate", autori, 1, "michael moorcock", 21, &kniha1);
-//    vyplnKnihu("weird of the white wolf", a2, 0, NULL, 0, &kniha2);
-//    pridaj_knihu(&kniha1, &kniznica);
-//    pridaj_knihu(&kniha2, &kniznica);
-//    
+    kniha_t kniha0;
+    kniha_t kniha1;
+    kniha_t kniha2;
+    kniha_t kniha3;
+    kniznica_t kniznica;
+    mapa_t mapa;
+    kniha_init(&kniha0);
+    kniha_init(&kniha1);
+    kniha_init(&kniha2);
+    kniha_init(&kniha3);
+    kniznica_init(&kniznica);
+    map_init(&mapa);
+    pridaj_map(&mapa, "peter chomic", 1);
+    char** autori = malloc(sizeof (char*)*50);
+    autori[0] = "michael moorcock";
+    char**a2 = malloc(sizeof (char*)*50);
+    a2[0] = "michael moorcock";
+    a2[1] = "peter chomic";
+    vyplnKnihu("weird of the white wolf", autori, 0, NULL, 0, &kniha0);
+    vyplnKnihu("sailor on the seas of the fate", autori, 1, "michael moorcock", 21, &kniha1);
+    vyplnKnihu("weird of the white wolf", a2, 0, NULL, 0, &kniha2);
+    vyplnKnihu("sailor on the seas of the fate", a2, 1, "peter", 20, &kniha3);
+    pridaj_knihu(&kniha0, &kniznica);
+    pridaj_knihu(&kniha1, &kniznica);
+    pridaj_knihu(&kniha2, &kniznica);
+    pridaj_knihu(&kniha3, &kniznica);
+    
 //    printf("%s\n", kniznica.knihy[0].nazov);
 //    printf("%s\n", kniznica.knihy[0].autori[0]);
 //    printf("%d\n", kniznica.knihy[0].pozicana);
@@ -46,7 +54,8 @@ int main(int argc, char** argv) {
 //    char k4[] = "sailor on the seas of the fate\tmichael moorcock,peter chomic\t1\tpeter\t20";
 //    char k5[] = "sailor on the seas of the fate\tmichael moorcock,peter chomic\t0";
 //    
-//    kniha_t kniha4 = zoStringu(k5);
+//    kniha_t kniha4 = zoStringu(k4);
+//    pridaj_knihu(&kniha4, &kniznica);
 //    printf("%s\n", kniha4.nazov);
 //    printf("%s\n", kniha4.autori[0]);
 //    printf("%s\n", kniha4.autori[1]);
@@ -57,15 +66,15 @@ int main(int argc, char** argv) {
 //    int comparement = compare(&kniha1, &kniha2);
 //    printf("%s\n", "ciselne porovnanie knih:");
 //    printf("%d\n", comparement);
-//    char* s_kniha1 = kniha_toString(&kniha1);
+//    char* s_kniha1 = kniha_toString(&kniha0);
 //    printf("%s\n", "vypis prvej knihy");
 //    printf("%s\n", s_kniha1);
 //    char* s_kniha2 = kniha_toString(&kniha2);
 //    printf("%s\n", "vypis druhej knihy");
 //    printf("%s\n", s_kniha2);
-//    char* s_kniznica = kniznica_toString(&kniznica);
-//    printf("%s\n", "vypis kniznice");
-//    printf("%s\n", s_kniznica);
+    char* s_kniznica = kniznica_toString(&kniznica);
+    printf("%s\n", "vypis kniznice");
+    printf("%s\n", s_kniznica);
 //    printf("%s\n", "pocet dni knihy pred novym dnom: ma byt 21");
 //    printf("%d\n", kniznica.knihy[0].doba);
 //    novyDen(3, &kniznica);
@@ -122,11 +131,11 @@ int main(int argc, char** argv) {
 
     printf("%s\n", "******************");
     //nejdu:
-    //uloz(&kniznica);// ak bol projekt v userovi tak sa v mene usera pridal znak / co sposobilo ze cygwin nemohol najst exe subor na spustenie
+  uloz(&kniznica);// ak bol projekt v userovi tak sa v mene usera pridal znak / co sposobilo ze cygwin nemohol najst exe subor na spustenie
     //ak som to dal do public priecinka tak som zase bez admin spustenia nemohol pridavat do suboru
 
-    //kniznica_t k2 = zoSuboru("C:\\Users\\Peťo Chomič\\Desktop\\materialy skola\\kniznica.txt"); //detto
-    //char* s_k2 = kniznica_toString(&kniznica);
-    //printf("%s\n", s_k2);
+    kniznica_t k2 = zoSuboru("C:\\Users\\Peťo Chomič\\Desktop\\materialy skola\\kniznica.txt"); //detto
+    char* s_k2 = kniznica_toString(&k2);
+    printf("%s\n", s_k2);
     return (EXIT_SUCCESS);
 }

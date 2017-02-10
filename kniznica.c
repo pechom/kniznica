@@ -235,7 +235,7 @@ char* kniha_toString(kniha_t *kniha) {
     int i;
     for (i = 0; i < kniha->autori_size; i++) {
         strncat(result, kniha->autori[i], strlen(kniha->autori[i]) + 1);
-        strncat(result, ",", 2);
+        strncat(result, ",", 1);
     }
     result[strlen(result) - 1] = 0;
     if (kniha->pozicana == 1) {
@@ -248,14 +248,13 @@ char* kniha_toString(kniha_t *kniha) {
         strncat(result, "\t", 2);
         snprintf(tmp, 10, "%d", kniha->doba);
         strncat(result, tmp, strlen(tmp) + 1);
-        strncat(result, "\t", 2);
     } else {
         strncat(result, "\t", 2);
         snprintf(tmp, 10, "%d", kniha->pozicana);
         strncat(result, tmp, strlen(tmp) + 1);
     }
     return result;
-}//v metode ktora ziadala result ho treb uvolnit
+}//v metode ktora ziadala result ho treba uvolnit
 
 char* kniznica_toString(kniznica_t *kniznica) {
     char* result = malloc(sizeof (char) * kniznica->size * 512); //predpokl. max velkost knihy
@@ -267,7 +266,6 @@ char* kniznica_toString(kniznica_t *kniznica) {
             strncpy(result, result_k, strlen(result_k) + 1);
         } else {
             strncat(result, result_k, strlen(result_k) + 1);
-            strncat(result, ",", 1);
         }
     }
     result[strlen(result) - 1] = 0;
@@ -299,6 +297,7 @@ kniznica_t zoSuboru(char* file) {
     f = fopen(file, "r");
     char buffer[512];
     while (fgets(buffer, sizeof (buffer), f)) {// fgets konci pri '\n'
+        //printf("%s\n",buffer);
         kniha = zoStringu(buffer);
         pridaj_knihu(&kniha, &kniznica);
     }
@@ -524,8 +523,8 @@ char* najOblubenejsiaKniha(kniznica_t *kniznica) {
     j = 0;
     for (j = 0; j < oblubenost.size; j++) {
         if ((oblubenost.pocty_vyskytov[j] == max_obl)&&(oblubenost.sucty_hodnot[j] == max_pozic)) {
-            result=malloc(sizeof(char)*(strlen(oblubenost.string_array[j])+1));
-            strncpy(result, oblubenost.string_array[j],strlen(oblubenost.string_array[j])+1);
+            result = malloc(sizeof (char)*(strlen(oblubenost.string_array[j]) + 1));
+            strncpy(result, oblubenost.string_array[j], strlen(oblubenost.string_array[j]) + 1);
             break;
         }
     }
