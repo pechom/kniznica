@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <ctype.h>
 #include <errno.h>
 
 #include "kniznica.h"
@@ -100,6 +101,14 @@ void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int dob
         kniha->citatel = NULL;
     }
     kniha->doba = doba;
+}
+
+void rtrim(char* s) {
+    int idx = strlen(s) - 1;
+    while ((idx >= 0) && isspace(s[idx])) {
+        s[idx] = 0;
+        idx--;
+    }
 }
 
 void pridaj_knihu(kniha_t *kniha, kniznica_t *kniznica) {
@@ -223,7 +232,7 @@ char** split(char* a_str, const char a_delim) {
         delim_length++;
     }
     free(str);
-    return result; //v metode ktora ziadala result ho treb uvolnit
+    return result; //v metode ktora ziadala result ho treba uvolnit
 }
 
 char* kniha_toString(kniha_t *kniha) {

@@ -34,6 +34,8 @@ void kniznica_free(kniznica_t *kniznica);
 
 void mapa_free(mapa_t *mapa);
 
+void rtrim(char* s);
+
 void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int doba, kniha_t *kniha);
 
 void pridaj_knihu(kniha_t *kniha, kniznica_t *kniznica);
