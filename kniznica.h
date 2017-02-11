@@ -72,7 +72,7 @@ int vratenie(char* nazov, char* citatel, kniznica_t *kniznica);
 
 int najdlhsiaVypozicka(kniznica_t *kniznica);
 
-int pocetTitulov(kniznica_t *kniznica);
+int pocetTitulovSRoznymNazvom(kniznica_t *kniznica);
 
 mapa_t poctyVypozicanychKnih(kniznica_t *kniznica);
 
