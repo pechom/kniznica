@@ -268,8 +268,9 @@ char* kniha_toString(kniha_t *kniha) {
 char* kniznica_toString(kniznica_t *kniznica) {
     char* result = malloc(sizeof (char) * kniznica->size * 512); //predpokl. max velkost knihy
     int i;
+    char* result_k;
     for (i = 0; i < kniznica->size; i++) {
-        char* result_k = kniha_toString(&kniznica->knihy[i]);
+        result_k = kniha_toString(&kniznica->knihy[i]);
         strncat(result_k, "\n", 2);
         if (i == 0) {
             strncpy(result, result_k, strlen(result_k) + 1);
@@ -278,22 +279,25 @@ char* kniznica_toString(kniznica_t *kniznica) {
         }
     }
     result[strlen(result) - 1] = 0;
+    free(result_k);
     return result; //v metode ktora ziadala result ho treb uvolnit
 }
 
 void uloz(kniznica_t *kniznica) {
     FILE *f;
     kniha_t kniha;
+    char* s_kn;
     f = fopen("C:\\Users\\Peťo Chomič\\Desktop\\materialy skola\\kniznica.txt", "w");
     if (f) {
         int i;
         for (i = 0; i < kniznica->size; i++) {
             kniha = kniznica->knihy[i];
-            char* s_kn = kniha_toString(&kniha);
+             s_kn = kniha_toString(&kniha);
             fwrite(s_kn, strlen(s_kn), sizeof (char), f);
             fprintf(f, "\n");
         }
         fclose(f);
+        free(s_kn);
     }
 }
 
