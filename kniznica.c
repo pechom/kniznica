@@ -6,6 +6,7 @@
 #include <signal.h>
 #include <ctype.h>
 #include <errno.h>
+#include <sys/unistd.h>
 
 #include "kniznica.h"
 
@@ -81,7 +82,6 @@ void mapa_free(mapa_t *mapa) {
 void vyplnKnihu(char *nazov, char **autori, int pozicana, char *citatel, int doba, kniha_t *kniha) {
     kniha->nazov = malloc((strlen(nazov) + 1) * sizeof (char));
     strncpy(kniha->nazov, nazov, strlen(nazov) + 1);
-    //autori su pole smernikov, teda na ich uchovanie treba velkost char* * velkost pola
     int count = 0;
     while (autori[count] != NULL) {
         count++;
@@ -113,7 +113,6 @@ void rtrim(char* s) {
 
 void pridaj_knihu(kniha_t *kniha, kniznica_t *kniznica) {
     kniznica->size = kniznica->size + 1;
-    //potrebujem velkost smerniku na knihu * pocet knih
     kniznica->knihy = realloc(kniznica->knihy, sizeof (kniha_t) * kniznica->size);
     kniznica->knihy[kniznica->size - 1] = *kniha;
 }
@@ -173,16 +172,19 @@ int compare(kniha_t *prva, kniha_t *druha) {// v<0 - prva je mensia, v>0 - druha
 kniha_t zoStringu(char* s_kniha) {
     kniha_t kniha;
     kniha_init(&kniha);
-    //polia smernikov na casti knihy. teoret. moze byt kniha splitovana po kazdom pismene, preto je ich velkost char pointer * dlzka retazca
     char** delimitovana = malloc(sizeof (char*) * strlen(s_kniha));
     char** s_autori = malloc(sizeof (char*) * strlen(s_kniha));
+    int i;
+    for (i = 0; i < 5; i++) {
+        delimitovana[i] = NULL;
+        s_autori[i]=NULL;
+    }
     int is_pozicana = 0;
     delimitovana = split(s_kniha, '\t');
     if (delim_length > 3) {
         is_pozicana = 1;
     }
     s_autori = split(delimitovana[1], ',');
-    int i;
     char* nazov = malloc(sizeof (char)*(strlen(delimitovana[0]) + 1));
     strncpy(nazov, delimitovana[0], strlen(delimitovana[0]) + 1);
     if (is_pozicana == 1) {
@@ -191,25 +193,29 @@ kniha_t zoStringu(char* s_kniha) {
         int doba = atoi(delimitovana[4]);
         vyplnKnihu(nazov, s_autori, is_pozicana, citatel, doba, &kniha);
         free(citatel);
-    } else {
-        char* citatel = NULL;
-        int doba = 0;
-        vyplnKnihu(nazov, s_autori, is_pozicana, citatel, doba, &kniha);
-    }
-
-    free(nazov);
-    i = 0;
-    for (i = 0; i < 5; i++) {
+            for (i = 0; i < 5; i++) {
         if (delimitovana[i] != NULL) {
             free(delimitovana[i]);
         }
     }
-    i = 0;
-    while (s_autori[i] != NULL) {
-        free(s_autori[i]);
-        i++;
+    } else {
+        char* citatel = NULL;
+        int doba = 0;
+        vyplnKnihu(nazov, s_autori, is_pozicana, citatel, doba, &kniha);
+            for (i = 0; i < 2; i++) {
+        if (delimitovana[i] != NULL) {
+            free(delimitovana[i]);
+        }
     }
-    free(s_autori);
+    }
+
+    free(nazov);
+//    for (i = 0; i < kniha.autori_size; i++) { 
+//        if (s_autori[i] != NULL) {
+//            free(s_autori[i]);
+//        }
+//    }
+//    free(s_autori);
     free(delimitovana);
     return kniha;
 }
@@ -221,7 +227,12 @@ char** split(char* a_str, const char a_delim) {
     char delim[2];
     delim[0] = a_delim;
     delim[1] = 0;
-    char** result = malloc(sizeof (char*) * strlen(a_str));
+    char** result = malloc(sizeof (char*) * (strlen(a_str)+1));
+    int i;
+    for (i = 0; i < (strlen(a_str)+1); i++) {
+        result[i]=NULL;
+    }
+
     token = strtok(a_str, delim);
     result[delim_length] = malloc((strlen(token) + 1) * sizeof (char));
     strncpy(result[delim_length], token, strlen(token) + 1);
@@ -232,7 +243,7 @@ char** split(char* a_str, const char a_delim) {
         delim_length++;
     }
     free(str);
-    return result; //v metode ktora ziadala result ho treba uvolnit
+    return result; 
 }
 
 char* kniha_toString(kniha_t *kniha) {
@@ -263,7 +274,7 @@ char* kniha_toString(kniha_t *kniha) {
         strncat(result, tmp, strlen(tmp) + 1);
     }
     return result;
-}//v metode ktora ziadala result ho treba uvolnit
+}
 
 char* kniznica_toString(kniznica_t *kniznica) {
     char* result = malloc(sizeof (char) * kniznica->size * 512); //predpokl. max velkost knihy
@@ -280,7 +291,7 @@ char* kniznica_toString(kniznica_t *kniznica) {
     }
     result[strlen(result) - 1] = 0;
     free(result_k);
-    return result; //v metode ktora ziadala result ho treb uvolnit
+    return result; 
 }
 
 void uloz(kniznica_t *kniznica) {
@@ -301,7 +312,7 @@ void uloz(kniznica_t *kniznica) {
     }
 }
 
-kniznica_t zoSuboru(char* file) {
+kniznica_t zoSuboru(char* file) { 
     FILE *f;
     kniznica_t kniznica;
     kniha_t kniha;
@@ -409,7 +420,7 @@ int pocetTitulovSRoznymNazvom(kniznica_t *kniznica) { //nahradzam set
             duplicita = 0;
         }
     }
-    // kniznica_free(&distinct);  eozhadzalo alokovane miesto v povodnej kniznici
+//    kniznica_free(&distinct);  
     return poc_k;
 }
 
