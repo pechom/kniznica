@@ -7,7 +7,6 @@
 #include "kniznica.h"
 
 #define STOP_COMMAND "STOP"
-#define END_COMMAND "END"
 
 int main(int argc, char** argv) {
     printf("%s\n", "******************");
