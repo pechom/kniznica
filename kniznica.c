@@ -420,7 +420,7 @@ int pocetTitulovSRoznymNazvom(kniznica_t *kniznica) { //nahradzam set
             duplicita = 0;
         }
     }
-//    kniznica_free(&distinct);  
+//   kniznica_free(&distinct);  
     return poc_k;
 }
 
