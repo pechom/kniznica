@@ -36,8 +36,6 @@ int main(int argc, char** argv) {
     //    pridaj_knihu(&kniha4, &kniznica);
     //    int i = 0;
     //    char* citatel = "michael moorcock";
-    //
-    //
     //    utried(&kniznica);
     //    printf("%s\n", "ukladanie kniznice do suboru");
     //    uloz(&kniznica);
@@ -115,9 +113,7 @@ int main(int argc, char** argv) {
     //    free(autorove_knihy);
     //    free(najoblubenjsia);
     //    free(slavni);
-
     printf("%s\n", "******************");
-
     char line[512];
     kniznica_t kniznica;
     kniha_t kniha;
@@ -127,7 +123,6 @@ int main(int argc, char** argv) {
     map_init(&mapa);
     int casNaCitatela = 0;
     char* citatel;
-
     printf("%s\n", "vitajte v programe na spravu kniznice");
     printf("%s\n", "prevedieme vas jeho funkcionalitou");
     printf("%s\n", "teraz pridavajte knihy. pre ukazanie niektorych funkcionalit je potrebne aby ste zadali aspon 2 knihy, prvvu pozicanu a druhu nie, zvysne mozu byt ako chcete. ak ste zadali knihy napiste STOP");
@@ -148,16 +143,9 @@ int main(int argc, char** argv) {
             casNaCitatela = 1;
         }
     }
-
     printf("%s\n", "triedim kniznicu");
     int i = 0;
     utried(&kniznica);
-    printf("%s\n", "ukladanie kniznice do suboru");
-     //       uloz(&kniznica);
-    //        printf("%s\n", "vypis kniznice zo suboru");
-    //        kniznica_t k2 = zoSuboru("C:\\Users\\Peťo Chomič\\Desktop\\materialy skola\\kniznica.txt");
-    //        char* s_k2 = kniznica_toString(&k2);
-    //        printf("%s\n", s_k2);
     char* s_kniha1 = kniha_toString(&kniznica.knihy[0]);
     printf("%s\n", "vypis prvej knihy");
     printf("%s\n", s_kniha1);
@@ -219,21 +207,27 @@ int main(int argc, char** argv) {
         printf("%s\n", slavni[i]);
         i++;
     }
-    //      kniznica_free(&kniznica);
-    //      kniznica_free(&k2);
+    printf("%s\n", "ukladanie kniznice do suboru");
+    uloz(&kniznica);
+    printf("%s\n", "vypis kniznice zo suboru");
+    kniznica_t k2 = zoSuboru("C:\\Users\\Peťo Chomič\\Desktop\\materialy skola\\kniznica.txt");
+    char* s_k2 = kniznica_toString(&k2);
+    printf("%s\n", s_k2);
+    //  kniznica_free(&kniznica);
+    //  kniznica_free(&k2);
     kniha_free(&kniha);
     mapa_free(&mapa);
     free(s_kniha1);
-    //       free(s_kniha2);
+    //  free(s_kniha2);
     free(s_kniznica);
     free(autorove_knihy);
     free(najoblubenjsia);
-    free(slavni);
+    //  free(slavni);
     printf("%s\n", "koniec");
     return (EXIT_SUCCESS);
 
     //chyby:
-    // v kniha zo stringu ked uvolnujem s_autori po prvku tak mi to ovplyvni metodu uloz kde ulozi chybne data
+    //v kniha zo stringu ked uvolnujem s_autori po prvku tak mi to ovplyvni metodu uloz kde ulozi chybne data
     //v metode pocetTitulovSRoznymNazvom ked som uvolnoval lokalnu kniznicu tak mi to sposobilo segmentation fault alebo menilo data na inych miestach
-    // ked mam vstup z konzoly vyskytuju sa rozne chyby aj ked je vstup taky isty ako v skusobnom vstupe
+    //len vtedy ked mam vstup z konzoly vsetky zakomentovane free mi robia fail aj ked je vstup taky isty ako v skusobnom vstupe
 }
