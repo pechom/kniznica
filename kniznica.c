@@ -17,7 +17,7 @@
 //for(int i = 0; i < sizeofarray; i++) {
 //malloc prvkov
 //  array[i] = malloc((strlen(s) + 1) * sizeof(char));  //tu uz je string
-//strcpy(array[i], string[i]);
+//strncpy(array[i], string[i]);
 //}
 
 
@@ -147,14 +147,13 @@ void utried(kniznica_t *kniznica) {
     int i = 0;
     int j = 0;
     kniha_t tmp;
-    kniha_init(&tmp);
     for (i = 0; i < kniznica->size; i++) {
         for (j = i + 1; j < kniznica->size; j++) {
             if (strcmp(kniznica->knihy[i].autori[0], kniznica->knihy[j].autori[0]) > 0) {
                 tmp = kniznica->knihy[i];
                 kniznica->knihy[i] = kniznica->knihy[j];
                 kniznica->knihy[j] = tmp;
-            } else if ((strcmp(kniznica->knihy[i].autori[0], kniznica->knihy[j].autori[0]) > 0)&&(kniznica->knihy[i].nazov, kniznica->knihy[j].nazov)) {
+            } else if ((strcmp(kniznica->knihy[i].autori[0], kniznica->knihy[j].autori[0]) == 0)&&(strcmp(kniznica->knihy[i].nazov, kniznica->knihy[j].nazov)>0)) {
                 tmp = kniznica->knihy[i];
                 kniznica->knihy[i] = kniznica->knihy[j];
                 kniznica->knihy[j] = tmp;
